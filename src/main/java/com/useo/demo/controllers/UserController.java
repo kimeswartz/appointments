@@ -6,6 +6,7 @@ import com.useo.demo.entities.SaveUser;
 import com.useo.demo.services.UserService;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RequestMapping("/users")
+@PreAuthorize("hasAnyRole('ADMIN','MANAGER')")
 @RestController
 public class UserController {
     private final UserService userService;
@@ -25,6 +27,7 @@ public class UserController {
     }
 
     @GetMapping("/me")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<SaveUser> getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -39,5 +42,4 @@ public class UserController {
 
         return ResponseEntity.ok(users);
     }
-
 }

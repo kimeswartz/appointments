@@ -1,10 +1,12 @@
 package com.useo.demo.entities;
 
 import jakarta.persistence.*;
+import org.checkerframework.checker.units.qual.C;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
@@ -36,6 +38,10 @@ public class SaveUser implements UserDetails {
     @UpdateTimestamp
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    @OneToOne(cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "role_id", referencedColumnName = "id", nullable = false)
+    private Role role;
 
     // Getters and Setters
 
@@ -90,11 +96,20 @@ public class SaveUser implements UserDetails {
         this.updatedAt = updatedAt;
     }
 
-    // Implement UserDetails methods
+    public Role getRole() {
+        return role;
+    }
+
+    public SaveUser setRole(Role role) {
+        this.role = role;
+        return this;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // Return an empty list or roles/authorities if your application has role management
-        return List.of();
+        SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + role.getName().toString());
+
+        return List.of(authority);
     }
 
     @Override
