@@ -39,36 +39,39 @@ public class SaveUser implements UserDetails {
 
     // Getters and Setters
 
-    public Long getId() {
-        return id;
-    }
-
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public SaveUser setFullName(String fullName) {
+        this.fullName = fullName;
+        return this;
+    }
+
+    public SaveUser setEmail(String email) {
+        this.email = email;
+        return this;
+    }
+
+    public SaveUser setPassword(String password) {
+        this.password = password;
+        return this;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public String getFullName() {
         return fullName;
     }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
-
     public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public String getPassword() {
         return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public LocalDateTime getCreatedAt() {

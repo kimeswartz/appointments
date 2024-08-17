@@ -20,7 +20,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 
-
 import java.io.IOException;
 
 // OncePerRequestFilter means it will execute once per request in the application
@@ -43,7 +42,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         this.handlerExceptionResolver = handlerExceptionResolver;
     }
 
-    // The main filter logic, called once per request. This method processes the JWT authentication.
     @Override
     protected void doFilterInternal(
             @NonNull HttpServletRequest request,
@@ -51,12 +49,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
 
-        // Retrieves the Authorization header from the request
         final String authHeader = request.getHeader("Authorization");
 
-        // Logic if the Authorization header is missing or doesn't start with "Bearer ", pass the request to the next filter without processing
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            filterChain.doFilter(request, response);
+            filterChain.doFilter(request, response);  // Pass the request to the next filter
             return;
         }
 
@@ -77,19 +73,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     );
 
                     authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
-
+                    SecurityContextHolder.getContext().setAuthentication(authenticationToken);
                 }
             }
 
-            // Passes the request and response to the next filter in the chain
             filterChain.doFilter(request, response);
 
-            // Handles any exceptions that occur during the filtering process
         } catch (Exception exception) {
             handlerExceptionResolver.resolveException(request, response, null, exception);
         }
-
     }
 
 }
