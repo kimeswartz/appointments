@@ -98,4 +98,3 @@ public class Treatment {
         this.updatedAt = LocalDateTime.now();
     }
 }
-
