@@ -20,6 +20,7 @@ import java.util.List;
 @PreAuthorize("hasAnyRole('ADMIN','MANAGER')")
 @RestController
 public class UserController {
+
     private final UserService userService;
 
     public UserController(UserService userService) {
@@ -42,4 +43,5 @@ public class UserController {
 
         return ResponseEntity.ok(users);
     }
+
 }

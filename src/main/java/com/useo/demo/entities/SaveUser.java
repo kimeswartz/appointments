@@ -45,10 +45,6 @@ public class SaveUser implements UserDetails {
 
     // Getters and Setters
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public SaveUser setFullName(String fullName) {
         this.fullName = fullName;
         return this;
@@ -84,16 +80,8 @@ public class SaveUser implements UserDetails {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
     public LocalDateTime getUpdatedAt() {
         return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
     }
 
     public Role getRole() {
