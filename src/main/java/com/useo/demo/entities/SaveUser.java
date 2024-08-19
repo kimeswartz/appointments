@@ -1,7 +1,7 @@
 package com.useo.demo.entities;
 
 import jakarta.persistence.*;
-import org.checkerframework.checker.units.qual.C;
+
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
