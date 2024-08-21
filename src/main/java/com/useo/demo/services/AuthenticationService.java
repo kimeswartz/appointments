@@ -3,10 +3,10 @@
 package com.useo.demo.services;
 
 import com.useo.demo.dtos.LoginUserDto;
-import com.useo.demo.dtos.RegisterUserDto;
+import com.useo.demo.dtos.UserDto;
 import com.useo.demo.entities.Role;
 import com.useo.demo.entities.RoleEnum;
-import com.useo.demo.entities.SaveUser;
+import com.useo.demo.entities.User;
 import com.useo.demo.repositories.RoleRepository;
 import com.useo.demo.repositories.UserRepository;
 
@@ -32,23 +32,25 @@ public class AuthenticationService {
         this.roleRepository = roleRepository;
     }
 
-    public SaveUser signup(RegisterUserDto input) {
+    public User signup(UserDto input) {
         Optional<Role> optionalRole = roleRepository.findByName(RoleEnum.USER);
 
         if (optionalRole.isEmpty()) {
             return null;
         }
 
-        var user = new SaveUser()
-                .setFullName(input.getFullName())
+        var user = new User()
+                .setName(input.getName())
+                .setSurname(input.getSurname())
                 .setEmail(input.getEmail())
+                .setPhoneNumber(input.getPhoneNumber())
                 .setPassword(passwordEncoder.encode(input.getPassword()))
                 .setRole(optionalRole.get());
 
         return userRepository.save(user);
     }
 
-    public SaveUser authenticate(LoginUserDto input) {
+    public User authenticate(LoginUserDto input) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         input.getEmail(),

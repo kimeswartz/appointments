@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface StaffRepository extends CrudRepository<Staff, Integer> {
+public interface StaffRepository extends CrudRepository<Staff, Long> {
     Optional<Staff> findByEmail(String email);
 }

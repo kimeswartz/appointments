@@ -13,9 +13,9 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
-@Table(name = "users")
+@Table(name = "user")
 @Entity
-public class SaveUser implements UserDetails {
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,13 +23,19 @@ public class SaveUser implements UserDetails {
     private Long id;
 
     @Column(nullable = false, length = 255)
-    private String fullName;
+    private String name;
+
+    @Column(nullable = false, length = 255)
+    private String surname;
 
     @Column(unique = true, length = 100, nullable = false)
     private String email;
 
     @Column(nullable = false, length = 60) // Ensure the length is appropriate for hashed passwords
     private String password;
+
+    @Column(nullable = false, length = 15)
+    private String phoneNumber;
 
     @CreationTimestamp
     @Column(updatable = false, name = "created_at")
@@ -43,20 +49,29 @@ public class SaveUser implements UserDetails {
     @JoinColumn(name = "role_id", referencedColumnName = "id", nullable = false)
     private Role role;
 
-    // Getters and Setters
 
-    public SaveUser setFullName(String fullName) {
-        this.fullName = fullName;
+    public User setName(String name) {
+        this.name = name;
         return this;
     }
 
-    public SaveUser setEmail(String email) {
+    public User setSurname(String surname) {
+        this.surname = surname;
+        return this;
+    }
+
+    public User setEmail(String email) {
         this.email = email;
         return this;
     }
 
-    public SaveUser setPassword(String password) {
+    public User setPassword(String password) {
         this.password = password;
+        return this;
+    }
+
+    public User setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
         return this;
     }
 
@@ -64,8 +79,12 @@ public class SaveUser implements UserDetails {
         return id;
     }
 
-    public String getFullName() {
-        return fullName;
+    public String getName() {
+        return name;
+    }
+
+    public String getSurname() {
+        return surname;
     }
 
     public String getEmail() {
@@ -74,6 +93,10 @@ public class SaveUser implements UserDetails {
 
     public String getPassword() {
         return password;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -88,7 +111,7 @@ public class SaveUser implements UserDetails {
         return role;
     }
 
-    public SaveUser setRole(Role role) {
+    public User setRole(Role role) {
         this.role = role;
         return this;
     }
@@ -96,7 +119,6 @@ public class SaveUser implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + role.getName().toString());
-
         return List.of(authority);
     }
 
@@ -107,25 +129,21 @@ public class SaveUser implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        // Implement logic to determine if the account is expired
         return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        // Implement logic to determine if the account is locked
         return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        // Implement logic to determine if the credentials are expired
         return true;
     }
 
     @Override
     public boolean isEnabled() {
-        // Implement logic to determine if the account is enabled
         return true;
     }
 }

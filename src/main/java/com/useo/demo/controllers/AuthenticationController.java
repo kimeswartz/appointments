@@ -1,8 +1,8 @@
 package com.useo.demo.controllers;
 
-import com.useo.demo.entities.SaveUser;
+import com.useo.demo.entities.User;
 import com.useo.demo.dtos.LoginUserDto;
-import com.useo.demo.dtos.RegisterUserDto;
+import com.useo.demo.dtos.UserDto;
 import com.useo.demo.responses.LoginResponse;
 import com.useo.demo.services.AuthenticationService;
 import com.useo.demo.services.JwtService;
@@ -27,14 +27,14 @@ public class AuthenticationController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<SaveUser> register(@Valid @RequestBody RegisterUserDto registerUserDto) {
-        SaveUser registeredUser = authenticationService.signup(registerUserDto);
+    public ResponseEntity<User> register(@Valid @RequestBody UserDto userDto) {
+        User registeredUser = authenticationService.signup(userDto);
         return ResponseEntity.ok(registeredUser);
     }
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> authenticate(@Valid @RequestBody LoginUserDto loginUserDto) {
-        SaveUser authenticatedUser = authenticationService.authenticate(loginUserDto);
+        User authenticatedUser = authenticationService.authenticate(loginUserDto);
         String jwtToken = jwtService.generateToken(authenticatedUser);
         LoginResponse loginResponse = new LoginResponse().setToken(jwtToken).setExpiresIn(jwtService.getExpirationTime());
         return ResponseEntity.ok(loginResponse);

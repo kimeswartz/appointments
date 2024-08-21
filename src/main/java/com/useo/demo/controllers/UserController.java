@@ -2,7 +2,7 @@ package com.useo.demo.controllers;
 
 // Class to return the authenticated user from the JWT token for endpoints /user and users/me/
 
-import com.useo.demo.entities.SaveUser;
+import com.useo.demo.entities.User;
 import com.useo.demo.services.UserService;
 
 import org.springframework.http.ResponseEntity;
@@ -29,17 +29,17 @@ public class UserController {
 
     @GetMapping("/me")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<SaveUser> getCurrentUser() {
+    public ResponseEntity<User> getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        SaveUser currentUser = (SaveUser) authentication.getPrincipal();
+        User currentUser = (User) authentication.getPrincipal();
 
         return ResponseEntity.ok(currentUser);
     }
 
     @GetMapping("/")
-    public ResponseEntity<List<SaveUser>> allUsers() {
-        List<SaveUser> users = userService.findAll();
+    public ResponseEntity<List<User>> allUsers() {
+        List<User> users = userService.findAll();
 
         return ResponseEntity.ok(users);
     }

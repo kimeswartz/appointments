@@ -5,11 +5,11 @@ package com.useo.demo.services;
   The layer acts as an intermediary between the controller and the UserRepository
  */
 
-import com.useo.demo.dtos.RegisterUserDto;
+import com.useo.demo.dtos.UserDto;
 import com.useo.demo.entities.Role;
 import com.useo.demo.entities.RoleEnum;
 
-import com.useo.demo.entities.SaveUser;
+import com.useo.demo.entities.User;
 import com.useo.demo.repositories.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -34,23 +34,25 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public List<SaveUser> findAll() {
-        List<SaveUser> users = new ArrayList<>();
+    public List<User> findAll() {
+        List<User> users = new ArrayList<>();
         userRepository.findAll().forEach(users::add);
 
         return users;
     }
 
-    public SaveUser createAdministrator(RegisterUserDto input) {
+    public User createAdministrator(UserDto input) {
         Optional<Role> optionalRole = roleRepository.findByName(RoleEnum.ADMIN);
 
         if (optionalRole.isEmpty()) {
             return null;
         }
 
-        var user = new SaveUser()
-                .setFullName(input.getFullName())
+        var user = new User()
+                .setName(input.getName())
+                .setSurname(input.getSurname())
                 .setEmail(input.getEmail())
+                .setPhoneNumber(input.getPhoneNumber())
                 .setPassword(passwordEncoder.encode(input.getPassword()))
                 .setRole(optionalRole.get());
 

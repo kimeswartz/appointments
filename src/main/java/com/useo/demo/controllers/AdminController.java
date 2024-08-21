@@ -1,9 +1,9 @@
 package com.useo.demo.controllers;
 
-import com.useo.demo.dtos.RegisterUserDto;
-import com.useo.demo.entities.SaveUser;
-import com.useo.demo.entities.Treatment;
-import com.useo.demo.services.TreatmentService;
+import com.useo.demo.dtos.UserDto;
+import com.useo.demo.entities.User;
+import com.useo.demo.entities.services.ServiceName;
+import com.useo.demo.services.services.ServiceOfNameService;
 import com.useo.demo.services.UserService;
 
 import org.springframework.http.ResponseEntity;
@@ -16,26 +16,26 @@ import java.util.List;
 @RestController
 public class AdminController {
     private final UserService userService;
-    private final TreatmentService treatmentService;
+    private final ServiceOfNameService serviceOfNameService;
 
-    public AdminController(UserService userService, TreatmentService treatmentService) {
+    public AdminController(UserService userService, ServiceOfNameService serviceOfNameService) {
         this.userService = userService;
-        this.treatmentService = treatmentService;
+        this.serviceOfNameService = serviceOfNameService;
     }
 
     @PostMapping
     @PreAuthorize("hasRole('MANAGER')")
-    public ResponseEntity<SaveUser> createAdministrator(@RequestBody RegisterUserDto registerUserDto) {
-        SaveUser createAdmin = userService.createAdministrator(registerUserDto);
+    public ResponseEntity<User> createAdministrator(@RequestBody UserDto userDto) {
+        User createAdmin = userService.createAdministrator(userDto);
 
         return ResponseEntity.ok(createAdmin);
     }
 
     @GetMapping("/treatments")
-    public ResponseEntity<List<Treatment>> allTreatments() {
-        List<Treatment> treatments = treatmentService.findAll();
+    public ResponseEntity<List<ServiceName>> allTreatments() {
+        List<ServiceName> serviceNames = serviceOfNameService.findAll();
 
-        return ResponseEntity.ok(treatments);
+        return ResponseEntity.ok(serviceNames);
     }
 
 }
