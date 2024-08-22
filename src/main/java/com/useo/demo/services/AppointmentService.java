@@ -14,7 +14,6 @@ import com.useo.demo.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,17 +35,36 @@ public class AppointmentService {
         this.serviceDetailsRepository = serviceDetailsRepository;
     }
 
-    // Create or update an appointment
-    public AppointmentDto saveAppointment(AppointmentDto appointmentDto) {
+    // Create a new appointment
+    public AppointmentDto createAppointment(AppointmentDto appointmentDto) {
         Appointment appointment = dtoToEntity(appointmentDto);
         Appointment savedAppointment = appointmentRepository.save(appointment);
         return entityToDto(savedAppointment);
     }
 
-    // Find an appointment by ID
-    public Optional<AppointmentDto> findAppointmentById(Long id) {
+    // Update an existing appointment
+    public AppointmentDto updateAppointment(Long id, AppointmentDto appointmentDto) {
+        Appointment appointment = dtoToEntity(appointmentDto);
+        appointment.setId(id); // Ensure the ID is set so it updates rather than creates a new one
+        Appointment updatedAppointment = appointmentRepository.save(appointment);
+        return entityToDto(updatedAppointment);
+    }
+
+    // Retrieve all appointments
+    public List<AppointmentDto> seeAllAppointments() {
+        List<Appointment> appointments = appointmentRepository.findAll();
+        return appointments.stream().map(this::entityToDto).toList();
+    }
+
+    // Retrieve an appointment by ID
+    public Optional<AppointmentDto> getAppointmentById(Long id) {
         Optional<Appointment> appointment = appointmentRepository.findById(id);
         return appointment.map(this::entityToDto);
+    }
+
+    // Delete an appointment by ID
+    public void deleteAppointment(Long id) {
+        appointmentRepository.deleteById(id);
     }
 
     // Find appointments by user ID

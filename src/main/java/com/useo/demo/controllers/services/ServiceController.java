@@ -20,7 +20,7 @@ public class ServiceController {
     }
 
     // Create a new service
-    @PostMapping("/service")
+    @PostMapping("/service/upload")
     @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<ServiceName> createService(@RequestBody ServiceDto serviceDto) {
         ServiceName serviceName = serviceOfNameService.createService(serviceDto);
@@ -28,7 +28,7 @@ public class ServiceController {
     }
 
     // Update an existing service
-    @PutMapping("/service/{id}")
+    @PutMapping("/service/update/{id}")
     @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<ServiceName> updateService(@PathVariable Long id, @RequestBody ServiceDto serviceDto) {
         if (!serviceOfNameService.existsById(id)) {
@@ -40,7 +40,7 @@ public class ServiceController {
     }
 
     // Get all services
-    @GetMapping("/service")
+    @GetMapping("/service/list")
     @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<List<ServiceName>> getAllServices() {
         List<ServiceName> services = serviceOfNameService.findAll();
@@ -48,7 +48,7 @@ public class ServiceController {
     }
 
     // Get a specific service by ID
-    @GetMapping("/service/{id}")
+    @GetMapping("/service/type/{id}")
     @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<ServiceName> getServiceById(@PathVariable Long id) {
         if (!serviceOfNameService.existsById(id)) {
@@ -59,7 +59,7 @@ public class ServiceController {
     }
 
     // Delete a specific service by ID
-    @DeleteMapping("/service/{id}")
+    @DeleteMapping("/service/delete/{id}")
     @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<Void> deleteService(@PathVariable Long id) {
         if (!serviceOfNameService.existsById(id)) {

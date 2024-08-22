@@ -9,6 +9,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequestMapping("/locations")
 @RestController
@@ -20,17 +21,43 @@ public class LocationController {
         this.locationService = locationService;
     }
 
-    @PostMapping
+    @PostMapping("/create")
     @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<Location> createLocation(@RequestBody LocationDto locationDto) {
         Location createdLocation = locationService.createLocation(locationDto);
         return ResponseEntity.ok(createdLocation);
     }
 
-    @GetMapping
-    @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER')")
+    @PutMapping("/update/{id}")
+    @PreAuthorize("hasRole('MANAGER')")
+    public ResponseEntity<Location> updateLocation(@PathVariable Long id, @RequestBody LocationDto locationDto) {
+        try {
+            Location updatedLocation = locationService.updateLocation(id, locationDto);
+            return ResponseEntity.ok(updatedLocation);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/list")
+    @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<List<Location>> findAllLocations() {
         List<Location> locationList = locationService.findAll();
         return ResponseEntity.ok(locationList);
+    }
+
+    @GetMapping("/single/{id}")
+    @PreAuthorize("hasRole('MANAGER')")
+    public ResponseEntity<Location> findLocationById(@PathVariable Long id) {
+        Optional<Location> location = locationService.findById(id);
+        return location.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasRole('MANAGER')")
+    public ResponseEntity<Void> deleteLocation(@PathVariable Long id) {
+        locationService.deleteLocation(id);
+        return ResponseEntity.noContent().build();
     }
 }

@@ -14,30 +14,23 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UserService {
+public class AdminService {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
+    public AdminService(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
-    // Retrieve all users
-    public List<User> findAll() {
-        List<User> users = new ArrayList<>();
-        userRepository.findAll().forEach(users::add);
-        return users;
-    }
-
-    // Create a new user with 'user' role by default
-    public User createUser(UserDto input) {
-        Optional<Role> optionalRole = roleRepository.findByName(RoleEnum.USER);
+    // Create a new user with ADMIN role
+    public User createAdministrator(UserDto input) {
+        Optional<Role> optionalRole = roleRepository.findByName(RoleEnum.ADMIN);
         if (optionalRole.isEmpty()) {
-            throw new RuntimeException("Role USER not found");
+            throw new RuntimeException("Role ADMIN not found");
         }
 
         var user = new User()
@@ -51,11 +44,14 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    // Update an existing user (regular users)
-    public User updateUser(Long id, UserDto input) {
+    // Update an existing admin user (only by MANAGER)
+    public User updateAdministrator(Long id, UserDto input) {
         Optional<User> existingUserOpt = userRepository.findById(id);
         if (existingUserOpt.isPresent()) {
             User existingUser = existingUserOpt.get();
+            if (!existingUser.getRole().getName().equals(RoleEnum.ADMIN)) {
+                throw new RuntimeException("User with id: " + id + " is not an ADMIN");
+            }
             existingUser.setName(input.getName())
                     .setSurname(input.getSurname())
                     .setEmail(input.getEmail())
@@ -73,16 +69,32 @@ public class UserService {
         }
     }
 
-    // Retrieve user by ID
-    public Optional<User> findById(Long id) {
-        return userRepository.findById(id);
-    }
-
-    // Delete a regular user by ID
-    public void deleteUser(Long id) {
-        if (!userRepository.existsById(id)) {
+    // Delete an ADMIN user by ID
+    public void deleteAdministrator(Long id) {
+        Optional<User> userOpt = userRepository.findById(id);
+        if (userOpt.isPresent()) {
+            User user = userOpt.get();
+            if (user.getRole().getName().equals(RoleEnum.ADMIN)) {
+                userRepository.deleteById(id);
+            } else {
+                throw new RuntimeException("User with id: " + id + " is not an ADMIN");
+            }
+        } else {
             throw new RuntimeException("User not found with id: " + id);
         }
-        userRepository.deleteById(id);
+    }
+
+    // Find all ADMIN users
+    public List<User> findAllAdmins() {
+        List<User> admins = new ArrayList<>();
+        Role adminRole = roleRepository.findByName(RoleEnum.ADMIN)
+                .orElseThrow(() -> new RuntimeException("Role ADMIN not found"));
+
+        userRepository.findAll().forEach(user -> {
+            if (user.getRole().equals(adminRole)) {
+                admins.add(user);
+            }
+        });
+        return admins;
     }
 }

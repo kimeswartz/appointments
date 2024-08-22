@@ -20,7 +20,7 @@ public class ServiceDetailsController {
     }
 
     // Create a new service detail
-    @PostMapping("/service-details")
+    @PostMapping("/service-details/upload")
     @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<ServiceDetails> createServiceDetails(@RequestBody ServiceDetailsDto serviceDetailsDto) {
         try {
@@ -32,7 +32,7 @@ public class ServiceDetailsController {
     }
 
     // Update an existing service detail
-    @PutMapping("/service-details/{id}")
+    @PutMapping("/service-details/update/{id}")
     @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<ServiceDetails> updateServiceDetails(@PathVariable Long id, @RequestBody ServiceDetailsDto serviceDetailsDto) {
         try {
@@ -44,7 +44,7 @@ public class ServiceDetailsController {
     }
 
     // Get all service details
-    @GetMapping("/service-details")
+    @GetMapping("/service-details/list")
     @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<List<ServiceDetails>> getAllServiceDetails() {
         List<ServiceDetails> serviceDetails = serviceDetailsService.findAll();
@@ -52,7 +52,7 @@ public class ServiceDetailsController {
     }
 
     // Get a specific service detail by ID
-    @GetMapping("/service-details/{id}")
+    @GetMapping("/service-details/single/{id}")
     @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<ServiceDetails> getServiceDetailsById(@PathVariable Long id) {
         try {
@@ -64,7 +64,7 @@ public class ServiceDetailsController {
     }
 
     // Delete a specific service detail by ID
-    @DeleteMapping("/service-details/{id}")
+    @DeleteMapping("/service-details/delete/{id}")
     @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<Void> deleteServiceDetails(@PathVariable Long id) {
         try {

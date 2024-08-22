@@ -2,40 +2,58 @@ package com.useo.demo.controllers;
 
 import com.useo.demo.dtos.UserDto;
 import com.useo.demo.entities.User;
-import com.useo.demo.entities.services.ServiceName;
-import com.useo.demo.services.services.ServiceOfNameService;
-import com.useo.demo.services.UserService;
-
+import com.useo.demo.services.AdminService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RequestMapping("/admins")
 @RestController
+@RequestMapping("/admins")
 public class AdminController {
-    private final UserService userService;
-    private final ServiceOfNameService serviceOfNameService;
 
-    public AdminController(UserService userService, ServiceOfNameService serviceOfNameService) {
-        this.userService = userService;
-        this.serviceOfNameService = serviceOfNameService;
+    private final AdminService adminService;
+
+    public AdminController(AdminService adminService) {
+        this.adminService = adminService;
     }
 
-    @PostMapping
+    @PostMapping("/create")
     @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<User> createAdministrator(@RequestBody UserDto userDto) {
-        User createAdmin = userService.createAdministrator(userDto);
-
-        return ResponseEntity.ok(createAdmin);
+        User createdUser = adminService.createAdministrator(userDto);
+        return ResponseEntity.ok(createdUser);
     }
 
-    @GetMapping("/treatments")
-    public ResponseEntity<List<ServiceName>> allTreatments() {
-        List<ServiceName> serviceNames = serviceOfNameService.findAll();
-
-        return ResponseEntity.ok(serviceNames);
+    @PutMapping("/update/{id}")
+    @PreAuthorize("hasRole('MANAGER')")
+    public ResponseEntity<User> updateAdministrator(@PathVariable Long id, @RequestBody UserDto userDto) {
+        try {
+            User updatedAdmin = adminService.updateAdministrator(id, userDto);
+            return ResponseEntity.ok(updatedAdmin);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
+
+    @GetMapping("/list")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER')")
+    public ResponseEntity<List<User>> findAllAdmins() {
+        List<User> adminList = adminService.findAllAdmins();
+        return ResponseEntity.ok(adminList);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasRole('MANAGER')")
+    public ResponseEntity<Void> deleteAdministrator(@PathVariable Long id) {
+        try {
+            adminService.deleteAdministrator(id);
+            return ResponseEntity.noContent().build();
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 
 }
