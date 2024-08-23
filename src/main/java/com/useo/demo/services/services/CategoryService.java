@@ -1,6 +1,7 @@
 package com.useo.demo.services.services;
 
 import com.useo.demo.dtos.services.ServiceCategoryDto;
+import com.useo.demo.dtos.services.CategoryDto;
 import com.useo.demo.entities.services.Category;
 import com.useo.demo.entities.services.ServiceName;
 import com.useo.demo.repositories.services.CategoryRepository;
@@ -22,20 +23,26 @@ public class CategoryService {
         this.serviceRepository = serviceRepository;
     }
 
-    public List<Category> findAll() {
+    public List<CategoryDto> findAll() {
         List<Category> categories = new ArrayList<>();
         categoryRepository.findAll().forEach(categories::add);
-        return categories;
+
+        List<CategoryDto> categoryDtos = new ArrayList<>();
+        for (Category category : categories) {
+            categoryDtos.add(convertToDto(category));
+        }
+
+        return categoryDtos;
     }
 
-    public Category createCategory(ServiceCategoryDto input) {
+    public CategoryDto createCategory(ServiceCategoryDto input) {
         var category = new Category()
                 .setName(input.getName());
 
-        return saveCategoryWithServices(input, category);
+        return convertToDto(saveCategoryWithServices(input, category));
     }
 
-    public Category updateCategory(Long id, ServiceCategoryDto input) {
+    public CategoryDto updateCategory(Long id, ServiceCategoryDto input) {
         Optional<Category> optionalCategory = categoryRepository.findById(id);
         if (optionalCategory.isEmpty()) {
             throw new IllegalArgumentException("Category not found with ID: " + id);
@@ -44,7 +51,7 @@ public class CategoryService {
         var category = optionalCategory.get()
                 .setName(input.getName());
 
-        return saveCategoryWithServices(input, category);
+        return convertToDto(saveCategoryWithServices(input, category));
     }
 
     private Category saveCategoryWithServices(ServiceCategoryDto input, Category category) {
@@ -52,9 +59,9 @@ public class CategoryService {
             List<ServiceName> services = new ArrayList<>();
             for (Long serviceId : input.getServiceIds()) {
                 Optional<ServiceName> optionalService = serviceRepository.findById(serviceId);
-                optionalService.ifPresent(services::add); // `services` list is of type `ServiceName`
+                optionalService.ifPresent(services::add);
             }
-            category.setServices(services); // Ensure `setServices` accepts a list of `ServiceName`
+            category.setServices(services);
         }
 
         return categoryRepository.save(category);
@@ -65,5 +72,12 @@ public class CategoryService {
             throw new IllegalArgumentException("Category not found with ID: " + id);
         }
         categoryRepository.deleteById(id);
+    }
+
+    private CategoryDto convertToDto(Category category) {
+        CategoryDto dto = new CategoryDto();
+        dto.setId(category.getId());
+        dto.setName(category.getName());
+        return dto;
     }
 }

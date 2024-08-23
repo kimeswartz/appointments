@@ -1,8 +1,7 @@
 package com.useo.demo.controllers.services;
 
 import com.useo.demo.dtos.services.ServiceDetailsDto;
-import com.useo.demo.entities.services.ServiceDetails;
-import com.useo.demo.services.services.ServiceDetailsService;
+import com.useo.demo.services.services.ServiceOfDetailsService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -13,62 +12,62 @@ import java.util.List;
 @RestController
 public class ServiceDetailsController {
 
-    private final ServiceDetailsService serviceDetailsService;
+    private final ServiceOfDetailsService serviceOfDetailsService;
 
-    public ServiceDetailsController(ServiceDetailsService serviceDetailsService) {
-        this.serviceDetailsService = serviceDetailsService;
+    public ServiceDetailsController(ServiceOfDetailsService serviceOfDetailsService) {
+        this.serviceOfDetailsService = serviceOfDetailsService;
     }
 
-    // Create a new service detail
-    @PostMapping("/service-details/upload")
+    // Create new service details
+    @PostMapping("/details/upload")
     @PreAuthorize("hasRole('MANAGER')")
-    public ResponseEntity<ServiceDetails> createServiceDetails(@RequestBody ServiceDetailsDto serviceDetailsDto) {
+    public ResponseEntity<ServiceDetailsDto> createServiceDetails(@RequestBody ServiceDetailsDto serviceDetailsDto) {
         try {
-            ServiceDetails serviceDetails = serviceDetailsService.createServiceDetails(serviceDetailsDto);
-            return ResponseEntity.ok(serviceDetails);
+            ServiceDetailsDto createdServiceDetailsDto = serviceOfDetailsService.createServiceDetails(serviceDetailsDto);
+            return ResponseEntity.ok(createdServiceDetailsDto);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(null);
+            return ResponseEntity.badRequest().build();
         }
     }
 
-    // Update an existing service detail
-    @PutMapping("/service-details/update/{id}")
+    // Update existing service details
+    @PutMapping("/details/update/{id}")
     @PreAuthorize("hasRole('MANAGER')")
-    public ResponseEntity<ServiceDetails> updateServiceDetails(@PathVariable Long id, @RequestBody ServiceDetailsDto serviceDetailsDto) {
+    public ResponseEntity<ServiceDetailsDto> updateServiceDetails(@PathVariable Long id, @RequestBody ServiceDetailsDto serviceDetailsDto) {
         try {
-            ServiceDetails updatedServiceDetails = serviceDetailsService.updateServiceDetails(id, serviceDetailsDto);
-            return ResponseEntity.ok(updatedServiceDetails);
+            ServiceDetailsDto updatedServiceDetailsDto = serviceOfDetailsService.updateServiceDetails(id, serviceDetailsDto);
+            return ResponseEntity.ok(updatedServiceDetailsDto);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.notFound().build();
         }
     }
 
     // Get all service details
-    @GetMapping("/service-details/list")
+    @GetMapping("/details/list")
     @PreAuthorize("hasRole('MANAGER')")
-    public ResponseEntity<List<ServiceDetails>> getAllServiceDetails() {
-        List<ServiceDetails> serviceDetails = serviceDetailsService.findAll();
-        return ResponseEntity.ok(serviceDetails);
+    public ResponseEntity<List<ServiceDetailsDto>> getAllServiceDetails() {
+        List<ServiceDetailsDto> serviceDetailsDtos = serviceOfDetailsService.findAll();
+        return ResponseEntity.ok(serviceDetailsDtos);
     }
 
-    // Get a specific service detail by ID
-    @GetMapping("/service-details/single/{id}")
+    // Get specific service details by ID
+    @GetMapping("/details/single/{id}")
     @PreAuthorize("hasRole('MANAGER')")
-    public ResponseEntity<ServiceDetails> getServiceDetailsById(@PathVariable Long id) {
+    public ResponseEntity<ServiceDetailsDto> getServiceDetailsById(@PathVariable Long id) {
         try {
-            ServiceDetails serviceDetails = serviceDetailsService.findById(id);
-            return ResponseEntity.ok(serviceDetails);
+            ServiceDetailsDto serviceDetailsDto = serviceOfDetailsService.findById(id);
+            return ResponseEntity.ok(serviceDetailsDto);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.notFound().build();
         }
     }
 
-    // Delete a specific service detail by ID
-    @DeleteMapping("/service-details/delete/{id}")
+    // Delete specific service details by ID
+    @DeleteMapping("/details/delete/{id}")
     @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<Void> deleteServiceDetails(@PathVariable Long id) {
         try {
-            serviceDetailsService.deleteServiceDetails(id);
+            serviceOfDetailsService.deleteServiceDetails(id);
             return ResponseEntity.noContent().build();
         } catch (IllegalArgumentException e) {
             return ResponseEntity.notFound().build();
