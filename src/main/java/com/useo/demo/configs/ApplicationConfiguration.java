@@ -5,7 +5,7 @@ package com.useo.demo.configs;
 // Perform the authentication by finding the user in our database.
 // Generate a JWT token when the authentication succeeds.
 
-import com.useo.demo.repositories.UserRepository;
+import com.useo.demo.repositories.user.UserRepository;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

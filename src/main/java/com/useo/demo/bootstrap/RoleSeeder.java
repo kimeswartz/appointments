@@ -3,9 +3,9 @@ package com.useo.demo.bootstrap;
 // Using Spring Boot system which allows executing some actions on the application startup.
 // This function seeds predefined roles into the database at application startup if they don't already exist.
 
-import com.useo.demo.entities.Role;
-import com.useo.demo.entities.RoleEnum;
-import com.useo.demo.repositories.RoleRepository;
+import com.useo.demo.entities.role.Role;
+import com.useo.demo.entities.role.RoleEnum;
+import com.useo.demo.repositories.role.RoleRepository;
 
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -29,11 +29,11 @@ public class RoleSeeder implements ApplicationListener<ContextRefreshedEvent> {
     }
 
     private void loadRoles() {
-        RoleEnum[] roleNames = new RoleEnum[] {RoleEnum.ADMIN, RoleEnum.USER, RoleEnum.MANAGER};
+        RoleEnum[] roleNames = new RoleEnum[] {RoleEnum.ADMIN, RoleEnum.USER, RoleEnum.SUPER_ADMIN};
         Map<RoleEnum, String> roleDescriptionMap = Map.of(
                 RoleEnum.USER, "Default user role",
                 RoleEnum.ADMIN, "Administrator role",
-                RoleEnum.MANAGER, "Manager role"
+                RoleEnum.SUPER_ADMIN, "Manager role"
         );
 
         Arrays.stream(roleNames).forEach(roleName -> {

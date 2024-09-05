@@ -1,14 +1,14 @@
 package com.useo.demo.bootstrap;
 
-// Create an Manager role upon startup of the application if not exist in db
+// Create a SUPER_ADMIN role upon startup of the application if not exist in db
 
-import com.useo.demo.dtos.UserDto;
-import com.useo.demo.entities.Role;
-import com.useo.demo.entities.RoleEnum;
-import com.useo.demo.entities.User;
+import com.useo.demo.dtos.user.UserSaveRequestDto;
+import com.useo.demo.entities.role.Role;
+import com.useo.demo.entities.role.RoleEnum;
+import com.useo.demo.entities.user.User;
 
-import com.useo.demo.repositories.UserRepository;
-import com.useo.demo.repositories.RoleRepository;
+import com.useo.demo.repositories.user.UserRepository;
+import com.useo.demo.repositories.role.RoleRepository;
 
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -41,27 +41,27 @@ public class ManagerSeeder implements ApplicationListener<ContextRefreshedEvent>
     }
 
     private void createManager() {
-        UserDto userDto = new UserDto();
-        userDto
+        UserSaveRequestDto userSaveRequestDto = new UserSaveRequestDto();
+        userSaveRequestDto
                 .setName("Kim")
                 .setSurname("Swartz")
-                .setEmail("manager@email.com")
-                .setPhoneNumber("0763188658")
+                .setEmail("owner@email.com")
+                .setPhoneNumber("0701111111")
                 .setPassword("123456");
 
-        Optional<Role> optionalRole = roleRepository.findByName(RoleEnum.MANAGER);
-        Optional<User> optionalUser = userRepository.findByEmail(userDto.getEmail());
+        Optional<Role> optionalRole = roleRepository.findByName(RoleEnum.SUPER_ADMIN);
+        Optional<User> optionalUser = userRepository.findByEmail(userSaveRequestDto.getEmail());
 
         if (optionalRole.isEmpty() || optionalUser.isPresent()) {
             return;
         }
 
         var user = new User();
-        user.setName(userDto.getName());
-        user.setSurname(userDto.getSurname());
-        user.setEmail(userDto.getEmail());
-        user.setPhoneNumber(userDto.getPhoneNumber());
-        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        user.setName(userSaveRequestDto.getName());
+        user.setSurname(userSaveRequestDto.getSurname());
+        user.setEmail(userSaveRequestDto.getEmail());
+        user.setPhoneNumber(userSaveRequestDto.getPhoneNumber());
+        user.setPassword(passwordEncoder.encode(userSaveRequestDto.getPassword()));
         user.setRole(optionalRole.get());
 
         userRepository.save(user);
