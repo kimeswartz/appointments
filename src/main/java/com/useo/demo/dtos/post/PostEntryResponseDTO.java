@@ -8,27 +8,29 @@ public class PostEntryResponseDTO {
     private String title;
     private String leadHtml;
     private String mainHtml;
-    private String author;
+    private Long userId;
     private String slug;
     private boolean published;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private String headerImageUrl;
 
-    public PostEntryResponseDTO() {
-    }
+    public PostEntryResponseDTO() {}
 
-    public PostEntryResponseDTO(Long id, String title, String leadHtml, String mainHtml, String author, String slug, boolean published, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public PostEntryResponseDTO(Long id, String title, String leadHtml, String mainHtml, Long userId, String slug, boolean published, LocalDateTime createdAt, LocalDateTime updatedAt, String headerImageUrl) {
         this.id = id;
         this.title = title;
         this.leadHtml = leadHtml;
         this.mainHtml = mainHtml;
-        this.author = author;
+        this.userId = userId;
         this.slug = slug;
         this.published = published;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.headerImageUrl = headerImageUrl;
     }
 
+    // Getters and Setters
     public Long getId() {
         return id;
     }
@@ -61,12 +63,12 @@ public class PostEntryResponseDTO {
         this.mainHtml = mainHtml;
     }
 
-    public String getAuthor() {
-        return author;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setAuthor(String author) {
-        this.author = author;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public String getSlug() {
@@ -99,5 +101,13 @@ public class PostEntryResponseDTO {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public String getHeaderImageUrl() {
+        return headerImageUrl;
+    }
+
+    public void setHeaderImageUrl(String headerImageUrl) {
+        this.headerImageUrl = headerImageUrl;
     }
 }

@@ -1,5 +1,6 @@
 package com.useo.demo.entities.post;
 
+import com.useo.demo.entities.user.User;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -23,8 +24,9 @@ public class PostEntry {
     @Column(name = "main_body", columnDefinition = "LONGTEXT", nullable = false)
     private String mainHtml;
 
-    @Column(name = "author", nullable = false)
-    private String author;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @CreationTimestamp
     @Column(updatable = false, name = "created_at")
@@ -40,21 +42,24 @@ public class PostEntry {
     @Column(nullable = false)
     private boolean published;
 
-    // Constructors
-    public PostEntry() {
-    }
+    @Column(name = "header_image_url")
+    private String headerImageUrl;
 
-    public PostEntry(Long id, String title, String leadHtml, String mainHtml, String author, String slug, boolean published) {
+    // Constructors
+    public PostEntry() {}
+
+    public PostEntry(Long id, String title, String leadHtml, String mainHtml, String slug, boolean published, User user, String headerImageUrl) {
         this.id = id;
         this.title = title;
         this.leadHtml = leadHtml;
         this.mainHtml = mainHtml;
-        this.author = author;
         this.slug = slug;
         this.published = published;
+        this.user = user;
+        this.headerImageUrl = headerImageUrl;
     }
 
-    // Getters and Setters with method chaining
+    // Getters and Setters
     public Long getId() {
         return id;
     }
@@ -73,15 +78,6 @@ public class PostEntry {
         return this;
     }
 
-    public String getMainHtml() {
-        return mainHtml;
-    }
-
-    public PostEntry setMainHtml(String mainHtml) {
-        this.mainHtml = mainHtml;
-        return this;
-    }
-
     public String getLeadHtml() {
         return leadHtml;
     }
@@ -91,12 +87,12 @@ public class PostEntry {
         return this;
     }
 
-    public String getAuthor() {
-        return author;
+    public String getMainHtml() {
+        return mainHtml;
     }
 
-    public PostEntry setAuthor(String author) {
-        this.author = author;
+    public PostEntry setMainHtml(String mainHtml) {
+        this.mainHtml = mainHtml;
         return this;
     }
 
@@ -133,6 +129,24 @@ public class PostEntry {
 
     public PostEntry setPublished(boolean published) {
         this.published = published;
+        return this;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public PostEntry setUser(User user) {
+        this.user = user;
+        return this;
+    }
+
+    public String getHeaderImageUrl() {
+        return headerImageUrl;
+    }
+
+    public PostEntry setHeaderImageUrl(String headerImageUrl) {
+        this.headerImageUrl = headerImageUrl;
         return this;
     }
 }

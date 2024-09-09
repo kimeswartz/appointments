@@ -34,7 +34,6 @@ public class PostController {
     }
 
     @GetMapping("/list")
-    @PreAuthorize("hasRole('USER') or hasRole('SUPER_ADMIN')")
     public ResponseEntity<List<PostEntryResponseDTO>> getAllPosts() {
         List<PostEntryResponseDTO> postEntryResponseDTOs = postService.findAll();
         return ResponseEntity.ok(postEntryResponseDTOs);
@@ -42,9 +41,15 @@ public class PostController {
 
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('USER') or hasRole('SUPER_ADMIN')")
     public ResponseEntity<PostEntryResponseDTO> getPostById(@PathVariable Long id) {
         return postService.findById(id)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/slug/{slug}")
+    public ResponseEntity<PostEntryResponseDTO> getPostBySlug(@PathVariable String slug) {
+        return postService.findBySlug(slug)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }

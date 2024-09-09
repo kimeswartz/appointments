@@ -1,4 +1,4 @@
-package com.useo.demo.configs;
+package com.useo.demo.configs.security;
 
 // Class to:
 // To override the HTTP basic authentication.
@@ -18,12 +18,12 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Configuration
-public class ApplicationConfiguration {
+public class ApplicationSecurityConfiguration {
     private final UserRepository userRepository;
 
     // Constructor to inject the UserRepository dependency.
     // This allows us to use the repository for finding users during authentication.
-    public ApplicationConfiguration(UserRepository userRepository) {
+    public ApplicationSecurityConfiguration(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 

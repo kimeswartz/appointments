@@ -1,4 +1,4 @@
-package com.useo.demo.bootstrap;
+package com.useo.demo.bootstrap.seeder;
 
 // Create a SUPER_ADMIN role upon startup of the application if not exist in db
 
@@ -19,13 +19,13 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public class ManagerSeeder implements ApplicationListener<ContextRefreshedEvent> {
+public class SuperAdminSeeder implements ApplicationListener<ContextRefreshedEvent> {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
 
     private final PasswordEncoder passwordEncoder;
 
-    public ManagerSeeder(
+    public SuperAdminSeeder(
             @NonNull UserRepository userRepository,
             @NonNull RoleRepository roleRepository,
             @NonNull PasswordEncoder passwordEncoder
@@ -43,10 +43,10 @@ public class ManagerSeeder implements ApplicationListener<ContextRefreshedEvent>
     private void createManager() {
         UserSaveRequestDto userSaveRequestDto = new UserSaveRequestDto();
         userSaveRequestDto
-                .setName("Kim")
-                .setSurname("Swartz")
-                .setEmail("owner@email.com")
-                .setPhoneNumber("0701111111")
+                .setName("Super")
+                .setSurname("Admin")
+                .setEmail("super@email.com")
+                .setPhoneNumber("0700123456")
                 .setPassword("123456");
 
         Optional<Role> optionalRole = roleRepository.findByName(RoleEnum.SUPER_ADMIN);

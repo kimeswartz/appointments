@@ -1,8 +1,9 @@
-package com.useo.demo.controllers.user;
+package com.useo.demo.controllers.admin;
 
 import com.useo.demo.dtos.user.UserResponseDto;
 import com.useo.demo.dtos.user.UserSaveRequestDto;
 import com.useo.demo.entities.user.User;
+
 import com.useo.demo.services.user.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -14,17 +15,16 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/user")
-public class UserController {
+@RequestMapping("/admin")
+public class AdminController {
 
     private final UserService userService;
 
-    public UserController(UserService userService) {
+    public AdminController(UserService userService) {
         this.userService = userService;
     }
 
-    @GetMapping("/current-user")
-    @PreAuthorize("hasAnyRole('USER','ADMIN', 'SUPER_ADMIN')")
+    @GetMapping("/current-admin")
     public ResponseEntity<UserResponseDto> getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User currentUser = (User) authentication.getPrincipal();
@@ -40,14 +40,14 @@ public class UserController {
     }
 
     @PostMapping("/create")
-    @PreAuthorize("hasAnyRole('ADMIN', 'SUPER_ADMIN')")
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN')")
     public ResponseEntity<UserResponseDto> createUser(@RequestBody UserSaveRequestDto userSaveRequestDto) {
         UserResponseDto createdUser = userService.createUser(userSaveRequestDto);
         return ResponseEntity.ok(createdUser);
     }
 
     @PutMapping("/update/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'SUPER_ADMIN')")
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN')")
     public ResponseEntity<UserResponseDto> updateUser(@PathVariable Long id, @RequestBody UserSaveRequestDto userSaveRequestDto) {
         try {
             UserResponseDto updatedUser = userService.updateUser(id, userSaveRequestDto);
@@ -66,7 +66,7 @@ public class UserController {
     }
 
     @DeleteMapping("/delete/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'SUPER_ADMIN')")
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN')")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         try {
             userService.deleteUser(id);

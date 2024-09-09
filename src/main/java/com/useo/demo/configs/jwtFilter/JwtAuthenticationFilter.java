@@ -1,9 +1,9 @@
-package com.useo.demo.configs.jwt;
+package com.useo.demo.configs.jwtFilter;
 
 // This class checks if the JWT token is valid, reject- or continue the users request based if it is valid or not.
 // If the token is valid, extract the username and find them in the db, and set in auth-context, so they can access any app layer.
 
-import com.useo.demo.services.authentication.JwtService;
+import com.useo.demo.services.jwt.JwtService;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

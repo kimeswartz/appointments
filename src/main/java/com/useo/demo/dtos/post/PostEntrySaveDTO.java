@@ -5,22 +5,24 @@ public class PostEntrySaveDTO {
     private String title;
     private String leadHtml;
     private String mainHtml;
-    private String author;
+    private Long userId;
     private String slug;
     private boolean published;
+    private String headerImageUrl;
 
-    public PostEntrySaveDTO() {
-    }
+    public PostEntrySaveDTO() {}
 
-    public PostEntrySaveDTO(String title, String leadHtml, String mainHtml, String author, String slug, boolean published) {
+    public PostEntrySaveDTO(String title, String leadHtml, String mainHtml, Long userId, String slug, boolean published, String headerImageUrl) {
         this.title = title;
         this.leadHtml = leadHtml;
         this.mainHtml = mainHtml;
-        this.author = author;
+        this.userId = userId;
         this.slug = slug;
         this.published = published;
+        this.headerImageUrl = headerImageUrl;
     }
 
+    // Getters and Setters
     public String getTitle() {
         return title;
     }
@@ -45,12 +47,12 @@ public class PostEntrySaveDTO {
         this.mainHtml = mainHtml;
     }
 
-    public String getAuthor() {
-        return author;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setAuthor(String author) {
-        this.author = author;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public String getSlug() {
@@ -67,5 +69,13 @@ public class PostEntrySaveDTO {
 
     public void setPublished(boolean published) {
         this.published = published;
+    }
+
+    public String getHeaderImageUrl() {
+        return headerImageUrl;
+    }
+
+    public void setHeaderImageUrl(String headerImageUrl) {
+        this.headerImageUrl = headerImageUrl;
     }
 }

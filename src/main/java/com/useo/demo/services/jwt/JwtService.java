@@ -1,4 +1,4 @@
-package com.useo.demo.services.authentication;
+package com.useo.demo.services.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

@@ -48,7 +48,7 @@ public class User implements UserDetails {
 
     @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "role_id", referencedColumnName = "id", nullable = false)
-    private Role role;
+    private Role userRole;
 
     public User setName(String name) {
         this.name = name;
@@ -108,17 +108,17 @@ public class User implements UserDetails {
     }
 
     public Role getRole() {
-        return role;
+        return userRole;
     }
 
-    public User setRole(Role role) {
-        this.role = role;
+    public User setRole(Role userRole) {
+        this.userRole = userRole;
         return this;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + role.getName().toString());
+        SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + userRole.getName().toString());
         return List.of(authority);
     }
 
