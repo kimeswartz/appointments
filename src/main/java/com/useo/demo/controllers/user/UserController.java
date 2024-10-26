@@ -3,6 +3,7 @@ package com.useo.demo.controllers.user;
 import com.useo.demo.dtos.user.UserResponseDto;
 import com.useo.demo.dtos.user.UserSaveRequestDto;
 import com.useo.demo.entities.user.User;
+import com.useo.demo.repositories.user.UserRepository;
 import com.useo.demo.services.user.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -75,4 +76,5 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
     }
+
 }
